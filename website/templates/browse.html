@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Breadcrumb -->
+<nav class="flex mb-6" aria-label="Breadcrumb">
+    <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+        <li class="inline-flex items-center">
+            <a href="#"
+                class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                <svg class="w-3 h-3 me-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                    viewBox="0 0 20 20">
+                    <path
+                        d="m19.707 9.293-2-2-7-7a1 1 0 0 0-1.414 0l-7 7-2 2a1 1 0 0 0 1.414 1.414L2 10.414V18a2 2 0 0 0 2 2h3a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h3a2 2 0 0 0 2-2v-7.586l.293.293a1 1 0 0 0 1.414-1.414Z" />
+                </svg>
+                Home
+            </a>
+        </li>
+        <li aria-current="page">
+            <div class="flex items-center">
+                <svg class="rtl:rotate-180 w-3 h-3 text-gray-400 mx-1" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 9 4-4-4-4" />
+                </svg>
+                <span class="ms-1 text-sm font-medium text-gray-500 md:ms-2 dark:text-gray-400">Browse</span>
+            </div>
+        </li>
+    </ol>
+</nav>
+
+<!-- Search Section -->
+<div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+    <form class="grid grid-cols-1">
+        <div class="flex items-center gap-2">
+            <!-- Search Input -->
+            <div class="relative flex-grow">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" id="search-query" name="query" hx-get="/search"
+                    hx-trigger="keyup changed delay:500ms" hx-target="#item-table"
+                    class="w-full pl-10 pr-10 py-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                    placeholder="Search title, author, tags...">
+            </div>
+
+            <!-- Search Icon Button -->
+            <button type="submit" data-tooltip-target="tooltip-search"
+                class="p-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                    <svg class="w-5 h-5 text-gray-500 dark:text-white" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+            </button>
+            <div id="tooltip-search" role="tooltip"
+                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700">
+                Search
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+
+            <!-- Filter Icon Button -->
+            <button type="button" data-collapse-toggle="advanced-filters" data-tooltip-target="tooltip-filter"
+                class="p-2 text-gray-700 dark:text-white bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V20a1 1 0 01-1.447.894l-4-2A1 1 0 019 18v-4.586L3.293 6.707A1 1 0 013 6V4z" />
+                </svg>
+            </button>
+            <div id="tooltip-filter" role="tooltip"
+                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700">
+                Filters
+                <div class="tooltip-arrow" data-popper-arrow></div>
+            </div>
+        </div>
+
+        <!-- Collapsible Advanced Filters -->
+        <div id="advanced-filters" class="mt-6 hidden border-t border-gray-200 dark:border-gray-700 pt-6">
+            <div class="space-y-4">
+
+                <!-- Author Row -->
+                <div class="flex items-center flex-wrap gap-2">
+                    <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">Author:</span>
+
+                    <!-- Example of a selected badge -->
+                    <span
+                        class="inline-flex items-center px-2 py-0.5 rounded text-sm bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        LITCHFIELD, E. L.
+                        <button type="button" class="ml-1 text-blue-500 hover:text-blue-700">
+                            &times;
+                        </button>
+                    </span>
+
+                    <!-- Add Button -->
+                    <button type="button"
+                        class="flex items-center justify-center w-5 h-5 text-xs font-bold text-gray-700 dark:text-white bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+                        data-tooltip-target="tooltip-author-add">
+                        +
+                    </button>
+                    <div id="tooltip-author-add" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700">
+                        Add author
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
+
+                <!-- Drawer Row -->
+                <div class="flex items-center flex-wrap gap-2">
+                    <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">Drawer:</span>
+                    <!-- Dynamic badges can go here -->
+                    <button type="button"
+                        class="flex items-center justify-center w-5 h-5 text-xs font-bold text-gray-700 dark:text-white bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+                        data-tooltip-target="tooltip-drawer-add">
+                        +
+                    </button>
+                    <div id="tooltip-drawer-add" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700">
+                        Add drawer
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
+
+                <!-- Tags Row -->
+                <div class="flex items-center flex-wrap gap-2">
+                    <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">Tags:</span>
+                    <!-- Example badges -->
+                    <span
+                        class="inline-flex items-center px-2 py-0.5 rounded text-sm bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        Handwritten
+                        <button type="button" class="ml-1 text-green-500 hover:text-green-700">
+                            &times;
+                        </button>
+                    </span>
+                    <span
+                        class="inline-flex items-center px-2 py-0.5 rounded text-sm bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        Unmatched
+                        <button type="button" class="ml-1 text-green-500 hover:text-green-700">
+                            &times;
+                        </button>
+                    </span>
+                    <button type="button"
+                        class="flex items-center justify-center w-5 h-5 text-xs font-bold text-gray-700 dark:text-white bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+                        data-tooltip-target="tooltip-tags-add">
+                        +
+                    </button>
+                    <div id="tooltip-tags-add" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700">
+                        Add tag
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
+
+                <!-- Status Row -->
+                <div class="flex items-center flex-wrap gap-2">
+                    <span class="text-sm font-semibold text-gray-700 dark:text-gray-200">Status:</span>
+                    <!-- Dynamic badges here -->
+                    <button type="button"
+                        class="flex items-center justify-center w-5 h-5 text-xs font-bold text-gray-700 dark:text-white bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"
+                        data-tooltip-target="tooltip-status-add">
+                        +
+                    </button>
+                    <div id="tooltip-status-add" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm tooltip dark:bg-gray-700">
+                        Add status
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</div>
+</form>
+</div>
+
+
+<!-- Item Table -->
+<div id="table-container">
+    {% include 'partials/table.html' %}
+</div>
+
+{% endblock %}
