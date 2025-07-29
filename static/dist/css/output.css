@@ -67,6 +67,7 @@
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
+    --color-primary-50: #eff6ff;
     --color-primary-300: #93c5fd;
     --color-primary-600: #2563eb;
     --color-primary-700: #1d4ed8;
@@ -2391,6 +2392,12 @@
   }
   .text-green-800 {
     color: var(--color-green-800);
+  }
+  .text-primary-50 {
+    color: var(--color-primary-50);
+  }
+  .text-primary-700 {
+    color: var(--color-primary-700);
   }
   .text-white {
     color: var(--color-white);

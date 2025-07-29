@@ -4,6 +4,7 @@ import numpy as np
 import re
 import duckdb
 import uuid
+import html
 from dataclasses import dataclass
 from data_classes import BRECard, SearchTable, RequestHeaders, Segment, SegmentTable
 
@@ -69,12 +70,12 @@ def segments():
 
     page = int(request.args.get("page", 1))
     q = request.args.get("query", None)
+    if q != None:
+        q = html.escape(q)
     headers = RequestHeaders(page, q)
     con = duckdb.connect("data/bre_cards.duckdb")
-    if q == None or q == "":
-        state["SegmentTable"].get_segments(con, headers)
-    # else:
-    #     state["SegmentTable"].search(con, headers)
+    
+    state["SegmentTable"].get_segments(con, headers)
 
     con.close()
 

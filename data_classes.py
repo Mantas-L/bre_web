@@ -289,8 +289,12 @@ class SegmentTable:
     headers: RequestHeaders = field(default=None)
 
     def get_segments(self, con, headers):
-        self.total = con.execute(""" SELECT COUNT(*) FROM segments """).fetchall()[0][0]
+        if headers.query != None:
+            self.total = con.execute(f" SELECT COUNT(*) FROM segments WHERE text ILIKE ?", (f"%{headers.query}%",)).fetchall()[0][0]
+        else:
+            self.total = con.execute(f" SELECT COUNT(*) FROM segments").fetchall()[0][0]
 
+        self.headers = headers
         print(f"total: {self.total}, pages: {self.segments_per_page}")
 
         self.total_pages = (self.total // self.segments_per_page + 1) + (
@@ -308,14 +312,26 @@ class SegmentTable:
             self.end = self.total
 
         self.segments = []
-        results = con.execute(
+        if headers.query != None:
+            query = f"%{headers.query}%"
+            results = con.execute(
             """
                     SELECT card_id, id, text, status
                     FROM segments
+                    WHERE text ILIKE ?
                     LIMIT ? OFFSET ?
                     """,
-            (self.segments_per_page, self.start),
+            (query, self.segments_per_page, self.start),
         ).fetchall()
+        else:
+            results = con.execute(
+                """
+                        SELECT card_id, id, text, status
+                        FROM segments
+                        LIMIT ? OFFSET ?
+                        """,
+                (self.segments_per_page, self.start),
+            ).fetchall()
 
         for r in results:
             segment = Segment(
@@ -327,16 +343,19 @@ class SegmentTable:
             self.segments.append(segment)
 
     def get_next_page(self, full=False):
+        query = f"query={self.headers.query}&" if self.headers.query != None else ''
         p = self.current_page + 1
         if p >= self.total_pages:
             p = 1
-        return f"/segments?page={p}{'&full_send=False' if not full else ''}"
+        return f"/segments?{query}page={p}{'&full_send=False' if not full else ''}"
 
     def get_prev_page(self, full=False):
+        query = f"query={self.headers.query}&" if self.headers.query != None else ''
         p = self.current_page - 1
         if p < 1:
             p = self.total_pages - 1
-        return f"/segments?page={p}{'&full_send=False' if not full else ''}"
+        return f"/segments?{query}page={p}{'&full_send=False' if not full else ''}"
 
     def get_page(self, page_num, full=False):
-        return f"/segments?page={page_num}{'&full_send=False' if not full else ''}"
+        query = f"query={self.headers.query}&" if self.headers.query != None else ''
+        return f"/segments?{query}page={page_num}{'&full_send=False' if not full else ''}"
