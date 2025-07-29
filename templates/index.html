@@ -1,6 +1,178 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.46.0/dist/apexcharts.min.js"></script>
+    <script src="https://unpkg.com/human-format@1/index.js"></script>
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">Dashboard</h1>
 
+    
+
+<div class="flex justify-left">
+<!-- Cards by status -->
+<div class="max-w-sm flex-col w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 m-4 md:p-6">
+
+  <div class="">
+      <div class="flex-col items-center">
+        <div class="flex items-center mb-1">
+            <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white me-1">Cards By Status</h5>
+            </div>
+  </div>
+
+  <!-- Line Chart -->
+  <div class="py-6" id="pie-chart"></div>
+
+  <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+    
+</div></div></div>
+
+<!-- Segments by status -->
+<div class="max-w-sm flex-col w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 m-4 md:p-6">
+
+  <div class="">
+      <div class="flex-col items-center">
+        <div class="flex items-center mb-1">
+            <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white me-1">Segments By Status</h5>
+            </div>
+  </div>
+
+  <!-- Line Chart -->
+  <div class="py-6" id="segment-pie-chart"></div>
+
+  <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+    
+</div></div>
+</div></div>
+<script>
+
+const getChartOptions = () => {
+  return {
+    series: {{ card_chart['series'] }},
+    colors: ['#d4a017', '#00ab67'],
+    chart: {
+      height: 420,
+      width: "100%",
+      type: "pie",
+    },
+    stroke: {
+      colors: ["white"],
+      lineCap: "",
+    },
+    plotOptions: {
+      pie: {
+        labels: {
+          show: true,
+        },
+        size: "100%",
+        dataLabels: {
+          offset: -25
+        }
+      },
+    },
+    labels: ['Segments', 'OCR_V1'],
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontFamily: "Inter, sans-serif",
+      },
+    },
+    legend: {
+      position: "bottom",
+      fontFamily: "Inter, sans-serif",
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return value
+        },
+      },
+    },
+    xaxis: {
+      labels: {
+        formatter: function (value) {
+          return value
+        },
+      },
+      axisTicks: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+  }
+}
+
+if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
+  const chart = new ApexCharts(document.getElementById("pie-chart"), getChartOptions());
+  chart.render();
+}
+
+</script>
+
+<script>
+
+const getChartOptions2 = () => {
+  return {
+    series: {{ segment_chart['series'] }},
+    colors: ['#ff4500', '#778899', '#00ab67'],
+    chart: {
+      height: 420,
+      width: "100%",
+      type: "pie",
+    },
+    stroke: {
+      colors: ["white"],
+      lineCap: "",
+    },
+    plotOptions: {
+      pie: {
+        labels: {
+          show: true,
+        },
+        size: "100%",
+        dataLabels: {
+          offset: -25
+        }
+      },
+    },
+    labels: ['seg_error', 'None', 'TrOCR_Printed'],
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontFamily: "Inter, sans-serif",
+      },
+    },
+    legend: {
+      position: "bottom",
+      fontFamily: "Inter, sans-serif",
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return value
+        },
+      },
+    },
+    xaxis: {
+      labels: {
+        formatter: function (value) {
+          return value
+        },
+      },
+      axisTicks: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+  }
+}
+
+if (document.getElementById("segment-pie-chart") && typeof ApexCharts !== 'undefined') {
+  const chart2 = new ApexCharts(document.getElementById("segment-pie-chart"), getChartOptions2());
+  chart2.render();
+}
+
+</script>
 {% endblock %}
