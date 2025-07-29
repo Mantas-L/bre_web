@@ -1,0 +1,43 @@
+{% import 'partials/pagination.html' as pagination%}
+
+<!-- Pagination top -->
+{{ pagination.pagination(table, True) }}
+
+
+<div class="relative overflow-x-auto shadow-xl sm:rounded-lg mx-auto max-w-screen-xl">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Card ID</th>
+                <th scope="col" class="px-6 py-3">Image</th>
+                <th scope="col" class="px-6 py-3">Text</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in table.segments %}
+            <tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700
+                           hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer
+                           transition-all duration-200 ease-in-out group"
+                data-collapse-toggle="dropdown-{{ loop.index }}" aria-expanded="false">
+                <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">{{ s.card_id }}</td>
+                <td><img src="/segimg/{{ s.segment_id }}"></td>
+                <td class="px-6 py-4">{{ s.text }}</td>
+                <td class="px-6 py-4">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                         {% if s.status == 'TrOCR_Printed' %} bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300
+                         {% elif s.status == 'seg_error' %} bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300
+                         {% else %} bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg
+                         {% endif %}">
+                        {{ s.status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Pagination bottom -->
+{{ pagination.pagination(table, False) }}
