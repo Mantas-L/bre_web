@@ -46,7 +46,7 @@
 
 const getChartOptions = () => {
   return {
-    series: {{ card_chart['series'] }},
+    series: [{{ card_chart["Segments"] }}, {{ card_chart["OCR_V1"] }}],
     colors: ['#d4a017', '#00ab67'],
     chart: {
       height: 420,
@@ -113,7 +113,7 @@ if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
 
 const getChartOptions2 = () => {
   return {
-    series: {{ segment_chart['series'] }},
+    series: [{{ segment_chart["seg_error"] }}, {{ segment_chart["None"] }}, {{ segment_chart["TrOCR_Printed"] }}],
     colors: ['#ff4500', '#778899', '#00ab67'],
     chart: {
       height: 420,

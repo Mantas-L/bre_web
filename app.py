@@ -20,24 +20,19 @@ def home():
 
     card_chart = {}
 
-    card_chart["series"] = []
-    card_chart["colors"] = ['#d4a017', '#00ab67']
-    card_chart["labels"] = []
-
     res = con.execute("SELECT status, COUNT(*) FROM cards GROUP BY status").fetchall()
 
     for r in res:
-        card_chart['series'].append(r[1])
-        card_chart["labels"].append(r[0])
+        val = r[0] if r[0] != None else 'None'
+        card_chart[val] = r[1]
 
     segment_chart = {}
-
-    segment_chart["series"] = []
 
     res = con.execute("SELECT status, COUNT(*) FROM segments GROUP BY status").fetchall()
 
     for r in res:
-        segment_chart['series'].append(r[1])
+        val = r[0] if r[0] != None else 'None'
+        segment_chart[val] = r[1]
 
     con.close()
     return render_template("index.html", card_chart=card_chart, segment_chart=segment_chart)
