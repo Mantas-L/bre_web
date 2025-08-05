@@ -295,7 +295,6 @@ class SegmentTable:
             self.total = con.execute(f" SELECT COUNT(*) FROM segments").fetchall()[0][0]
 
         self.headers = headers
-        print(f"total: {self.total}, pages: {self.segments_per_page}")
 
         self.total_pages = (self.total // self.segments_per_page + 1) + (
             0 if self.total % self.segments_per_page == 0 else 1

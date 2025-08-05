@@ -41,6 +41,24 @@
   <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
     
 </div></div>
+</div>
+
+<!-- Handwritten vs. Printed Segments -->
+<div class="max-w-sm flex-col w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 m-4 md:p-6">
+
+  <div class="">
+      <div class="flex-col items-center">
+        <div class="flex items-center mb-1">
+            <h5 class="text-xl font-bold leading-none text-gray-900 dark:text-white me-1">Handwritten vs. Printed Segments</h5>
+            </div>
+  </div>
+
+  <!-- Line Chart -->
+  <div class="py-6" id="segment-hwpr-pie-chart"></div>
+
+  <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between">
+    
+</div></div>
 </div></div>
 <script>
 
@@ -113,8 +131,8 @@ if (document.getElementById("pie-chart") && typeof ApexCharts !== 'undefined') {
 
 const getChartOptions2 = () => {
   return {
-    series: [{{ segment_chart["seg_error"] }}, {{ segment_chart["None"] }}, {{ segment_chart["TrOCR_Printed"] }}],
-    colors: ['#ff4500', '#778899', '#00ab67'],
+    series: [{{ segment_chart["seg_error"] }}, {{ segment_chart["TrOCR_Printed"] }}],
+    colors: ['#ff4500', '#00ab67'],
     chart: {
       height: 420,
       width: "100%",
@@ -135,7 +153,7 @@ const getChartOptions2 = () => {
         }
       },
     },
-    labels: ['seg_error', 'None', 'TrOCR_Printed'],
+    labels: ['seg_error', 'TrOCR_Printed'],
     dataLabels: {
       enabled: true,
       style: {
@@ -171,6 +189,73 @@ const getChartOptions2 = () => {
 
 if (document.getElementById("segment-pie-chart") && typeof ApexCharts !== 'undefined') {
   const chart2 = new ApexCharts(document.getElementById("segment-pie-chart"), getChartOptions2());
+  chart2.render();
+}
+
+</script>
+
+<script>
+
+const getChartOptions3 = () => {
+  return {
+    series: [317879, 834791],
+    colors: ['#9061F9', '#1C64F2'],
+    chart: {
+      height: 420,
+      width: "100%",
+      type: "pie",
+    },
+    stroke: {
+      colors: ["white"],
+      lineCap: "",
+    },
+    plotOptions: {
+      pie: {
+        labels: {
+          show: true,
+        },
+        size: "100%",
+        dataLabels: {
+          offset: -25
+        }
+      },
+    },
+    labels: ['Handwritten', 'Printed'],
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontFamily: "Inter, sans-serif",
+      },
+    },
+    legend: {
+      position: "bottom",
+      fontFamily: "Inter, sans-serif",
+    },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          return value
+        },
+      },
+    },
+    xaxis: {
+      labels: {
+        formatter: function (value) {
+          return value
+        },
+      },
+      axisTicks: {
+        show: false,
+      },
+      axisBorder: {
+        show: false,
+      },
+    },
+  }
+}
+
+if (document.getElementById("segment-hwpr-pie-chart") && typeof ApexCharts !== 'undefined') {
+  const chart2 = new ApexCharts(document.getElementById("segment-hwpr-pie-chart"), getChartOptions3());
   chart2.render();
 }
 
